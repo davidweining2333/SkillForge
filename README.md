@@ -7,8 +7,72 @@
 
 > 结论：Rules 也需要支持安装。因为不同 Agent 的规则入口不同，安装器必须支持用户自选目标路径，并提供常见 preset。
 
+## 快速安装：不需要 clone
+
+本仓库配置了 [package.json](package.json) 和 [bin/meos-skills.mjs](bin/meos-skills.mjs)，可以直接通过 GitHub + `npx` 运行。
+
+把下面命令里的 `<owner>/<repo>` 替换成你的 GitHub 仓库，例如 `your-name/skills`：
+
+```bash
+npx github:<owner>/<repo> list
+npx github:<owner>/<repo> targets
+```
+
+安装到 Claude Code 用户级规则，让规则在所有项目生效：
+
+```bash
+npx github:<owner>/<repo> install language-mirroring --preset claude-code-user-rules --backup
+npx github:<owner>/<repo> install engineering-terminology-explainer --preset claude-code-user-rules --backup
+```
+
+安装到当前项目的 Claude Code 规则文件：
+
+```bash
+npx github:<owner>/<repo> install language-mirroring --preset claude-code-project-rules --backup
+npx github:<owner>/<repo> install engineering-terminology-explainer --preset claude-code-project-rules --backup
+```
+
+安装到 Ruler 项目规则目录：
+
+```bash
+npx github:<owner>/<repo> install language-mirroring --preset ruler-project-rules --backup
+npx github:<owner>/<repo> install engineering-terminology-explainer --preset ruler-project-rules --backup
+```
+
+升级已安装规则：
+
+```bash
+npx github:<owner>/<repo> update language-mirroring --preset claude-code-user-rules --backup
+npx github:<owner>/<repo> update engineering-terminology-explainer --preset claude-code-user-rules --backup
+```
+
+## 让 Agent 用自然语言帮你安装
+
+如果用户不想自己运行命令，也可以把本仓库 GitHub 地址发给正在使用的 Agent，并说明目标。
+
+示例提示词：
+
+```text
+请从这个 GitHub 仓库安装 rules：<你的 GitHub 仓库 URL>
+我要安装 language-mirroring 和 engineering-terminology-explainer。
+我是 Claude Code 用户，请安装到用户级规则，让所有项目都生效。安装前先 dry-run，确认路径后用 --backup 安装。
+```
+
+或者：
+
+```text
+请从这个 GitHub 仓库安装 rules：<你的 GitHub 仓库 URL>
+我要在当前项目安装 language-mirroring 和 engineering-terminology-explainer。
+如果是 Claude Code 项目，请写入项目 CLAUDE.md；如果是 Ruler 项目，请写入 .ruler/rules。安装时保留备份。
+```
+
+给 Agent 的详细安装说明在 [AGENT_INSTALL.md](AGENT_INSTALL.md)。
+
 ## 仓库内容
 
+- [package.json](package.json)：让仓库可通过 `npx github:<owner>/<repo>` 直接运行。
+- [bin/meos-skills.mjs](bin/meos-skills.mjs)：统一 CLI 入口，支持 `list`、`targets`、`install`、`update`、`validate`。
+- [AGENT_INSTALL.md](AGENT_INSTALL.md)：给 AI Agent 阅读的自然语言安装指南。
 - [registry.json](registry.json)：机器可读的安装索引，记录 skill / rule 的名称、版本、路径和安装模式。
 - [targets.json](targets.json)：常见 Agent 安装目标预设。
 - [rules/](rules/)：长期生效的规则文件。

@@ -1,0 +1,28 @@
+{
+  "name": "meos-skills",
+  "version": "0.1.0",
+  "description": "A cross-agent installer repository for reusable rules and skills.",
+  "type": "module",
+  "bin": {
+    "meos-skills": "bin/meos-skills.mjs"
+  },
+  "files": [
+    "bin/",
+    "scripts/",
+    "rules/",
+    "_template/",
+    "registry.json",
+    "targets.json",
+    "README.md",
+    "AGENT_INSTALL.md"
+  ],
+  "scripts": {
+    "validate": "node scripts/validate-skills.mjs",
+    "targets": "node scripts/install.mjs --list-targets",
+    "install:dry-run": "node scripts/install.mjs language-mirroring --preset claude-code-user-rules --dry-run"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT"
+}
