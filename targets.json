@@ -1,0 +1,32 @@
+{
+  "claude-code-user-rules": {
+    "description": "Claude Code user-level persistent instructions file",
+    "mode": "rule-file",
+    "path": "~/.claude/CLAUDE.md"
+  },
+  "claude-code-project-rules": {
+    "description": "Claude Code project-level instructions file in the current project",
+    "mode": "rule-file",
+    "path": "CLAUDE.md"
+  },
+  "claude-code-user-skills": {
+    "description": "Claude Code user-level skills directory",
+    "mode": "skill-directory",
+    "path": "~/.claude/skills"
+  },
+  "claude-code-project-skills": {
+    "description": "Claude Code project-level skills directory in the current project",
+    "mode": "skill-directory",
+    "path": ".claude/skills"
+  },
+  "ruler-project-rules": {
+    "description": "Ruler project rules directory",
+    "mode": "rule-directory",
+    "path": ".ruler/rules"
+  },
+  "ruler-project-skills": {
+    "description": "Ruler project skills directory",
+    "mode": "skill-directory",
+    "path": ".ruler/skills"
+  }
+}

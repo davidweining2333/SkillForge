@@ -1,0 +1,28 @@
+[
+  {
+    "name": "engineering-terminology-explainer",
+    "type": "rule",
+    "title": "Engineering Terminology Explainer",
+    "description": "After completing coding work, explain reusable software engineering concepts with precise industry terminology when the completed solution demonstrates one.",
+    "version": "0.1.0",
+    "path": "rules/engineering-terminology-explainer.md",
+    "tags": ["engineering", "architecture", "terminology", "learning"],
+    "compatibility": ["generic-agent"],
+    "installModes": ["rule-directory", "rule-file"],
+    "recommendedMode": "rule-file",
+    "updatedAt": "2026-08-07"
+  },
+  {
+    "name": "language-mirroring",
+    "type": "rule",
+    "title": "Language Mirroring and English Correction",
+    "description": "Reply in the user's language and correct all English grammar and spelling mistakes.",
+    "version": "0.1.0",
+    "path": "rules/language-mirroring.md",
+    "tags": ["language", "writing", "communication"],
+    "compatibility": ["generic-agent"],
+    "installModes": ["rule-directory", "rule-file"],
+    "recommendedMode": "rule-file",
+    "updatedAt": "2026-08-07"
+  }
+]
