@@ -1,11 +1,21 @@
 {
   "claude-code-user-rules": {
-    "description": "Claude Code user-level persistent instructions file",
+    "description": "Claude Code user-level rules directory; each rule is installed as an independent file for easier upgrades",
+    "mode": "rule-directory",
+    "path": "~/.claude/rules"
+  },
+  "claude-code-project-rules": {
+    "description": "Claude Code project-level rules directory in the current project; each rule is installed as an independent file for easier upgrades",
+    "mode": "rule-directory",
+    "path": ".claude/rules"
+  },
+  "claude-code-user-instructions": {
+    "description": "Claude Code user-level single instructions file; use only when the agent does not support a rules directory",
     "mode": "rule-file",
     "path": "~/.claude/CLAUDE.md"
   },
-  "claude-code-project-rules": {
-    "description": "Claude Code project-level instructions file in the current project",
+  "claude-code-project-instructions": {
+    "description": "Claude Code project-level single instructions file; use only when the agent does not support a rules directory",
     "mode": "rule-file",
     "path": "CLAUDE.md"
   },

@@ -11,6 +11,12 @@ This repository contains reusable cross-agent items:
 
 The machine-readable index is `registry.json`. Target presets are in `targets.json`.
 
+## Important installation rule
+
+Install each rule as its own file whenever possible. Do **not** merge multiple rules into one shared rule file by default. Independent files are easier to update, replace, remove, diff, and audit.
+
+Use `rule-file` mode only as a fallback when the target agent truly supports only a single instruction file.
+
 ## Preferred installation method
 
 If the user provides this GitHub repository URL, do not ask them to clone it. Use the GitHub-backed `npx` form:
@@ -36,21 +42,26 @@ Use the user's agent and scope to choose the preset:
 
 | User intent | Preset |
 | --- | --- |
-| Claude Code, all projects / global / user-level | `claude-code-user-rules` |
-| Claude Code, current project only | `claude-code-project-rules` |
+| Claude Code, all projects / global / user-level, independent rule files | `claude-code-user-rules` |
+| Claude Code, current project only, independent rule files | `claude-code-project-rules` |
+| Claude Code single user instruction file fallback | `claude-code-user-instructions` |
+| Claude Code single project instruction file fallback | `claude-code-project-instructions` |
 | Ruler, current project rules | `ruler-project-rules` |
-| Custom rule file | use `--mode rule-file --target <file>` |
 | Custom rule directory | use `--mode rule-directory --target <dir>` |
+| Custom single rule file fallback | use `--mode rule-file --target <file>` |
 | Skill directory | use `--mode skill-directory --target <dir>` |
 
 If the user has not said whether the rule should be global or project-only, ask one clarification question before writing files.
+
+If the selected Agent does not automatically load a rules directory, explain that the independent files have been installed and ask whether the user wants a small project/global loader file that references them instead of embedding all rule content into one file.
 
 ## Safety rules
 
 1. Prefer `--dry-run` first when the target path is custom or uncertain.
 2. Use `--backup` for real installs and updates.
-3. Do not overwrite unrelated user instructions. The installer uses managed blocks for `rule-file` mode.
-4. If a command fails because `npx github:<owner>/<repo>` cannot resolve, tell the user to verify that the GitHub repository is public and has `package.json` with a `bin` entry.
+3. Prefer `rule-directory` mode so every rule remains an independent file.
+4. Do not overwrite unrelated user instructions. If `rule-file` fallback is unavoidable, the installer uses managed blocks.
+5. If a command fails because `npx github:<owner>/<repo>` cannot resolve, tell the user to verify that the GitHub repository is public and has `package.json` with a `bin` entry.
 
 ## Common user requests
 
@@ -73,7 +84,7 @@ npx github:<owner>/<repo> install engineering-terminology-explainer --preset cla
 
 ### "Install these rules into this project"
 
-For Claude Code project-level rules, run from the project root:
+For Claude Code project-level independent rule files, run from the project root:
 
 ```bash
 npx github:<owner>/<repo> install language-mirroring --preset claude-code-project-rules --backup

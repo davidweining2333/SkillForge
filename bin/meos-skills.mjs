@@ -22,7 +22,7 @@ Examples:
   meos-skills list
   meos-skills targets
   meos-skills install language-mirroring --preset claude-code-user-rules --backup
-  meos-skills update engineering-terminology-explainer --mode rule-file --target ~/.claude/CLAUDE.md --backup
+  meos-skills update engineering-terminology-explainer --preset claude-code-user-rules --backup
 
 Run through GitHub without cloning:
   npx github:<owner>/<repo> list

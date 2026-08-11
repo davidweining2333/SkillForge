@@ -9,7 +9,7 @@
     "tags": ["engineering", "architecture", "terminology", "learning"],
     "compatibility": ["generic-agent"],
     "installModes": ["rule-directory", "rule-file"],
-    "recommendedMode": "rule-file",
+    "recommendedMode": "rule-directory",
     "updatedAt": "2026-08-07"
   },
   {
@@ -22,7 +22,7 @@
     "tags": ["language", "writing", "communication"],
     "compatibility": ["generic-agent"],
     "installModes": ["rule-directory", "rule-file"],
-    "recommendedMode": "rule-file",
+    "recommendedMode": "rule-directory",
     "updatedAt": "2026-08-07"
   }
 ]

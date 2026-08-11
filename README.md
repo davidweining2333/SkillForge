@@ -18,14 +18,14 @@ npx github:<owner>/<repo> list
 npx github:<owner>/<repo> targets
 ```
 
-安装到 Claude Code 用户级规则，让规则在所有项目生效：
+安装到 Claude Code 用户级 rules 目录，让规则在所有项目生效。每个 rule 都会作为独立文件安装，便于后续单独升级、删除和审计：
 
 ```bash
 npx github:<owner>/<repo> install language-mirroring --preset claude-code-user-rules --backup
 npx github:<owner>/<repo> install engineering-terminology-explainer --preset claude-code-user-rules --backup
 ```
 
-安装到当前项目的 Claude Code 规则文件：
+安装到当前项目的 Claude Code rules 目录：
 
 ```bash
 npx github:<owner>/<repo> install language-mirroring --preset claude-code-project-rules --backup
@@ -55,7 +55,7 @@ npx github:<owner>/<repo> update engineering-terminology-explainer --preset clau
 ```text
 请从这个 GitHub 仓库安装 rules：<你的 GitHub 仓库 URL>
 我要安装 language-mirroring 和 engineering-terminology-explainer。
-我是 Claude Code 用户，请安装到用户级规则，让所有项目都生效。安装前先 dry-run，确认路径后用 --backup 安装。
+我是 Claude Code 用户，请安装到用户级 rules 目录，让所有项目都生效。每个 rule 必须独立文件安装，不要合并到同一个规则文件。安装前先 dry-run，确认路径后用 --backup 安装。
 ```
 
 或者：
@@ -63,7 +63,7 @@ npx github:<owner>/<repo> update engineering-terminology-explainer --preset clau
 ```text
 请从这个 GitHub 仓库安装 rules：<你的 GitHub 仓库 URL>
 我要在当前项目安装 language-mirroring 和 engineering-terminology-explainer。
-如果是 Claude Code 项目，请写入项目 CLAUDE.md；如果是 Ruler 项目，请写入 .ruler/rules。安装时保留备份。
+请把每个 rule 安装成独立文件，不要合并到同一个规则文件。如果是 Claude Code 项目，请写入项目 .claude/rules；如果是 Ruler 项目，请写入 .ruler/rules。安装时保留备份。
 ```
 
 给 Agent 的详细安装说明在 [AGENT_INSTALL.md](AGENT_INSTALL.md)。
@@ -137,6 +137,8 @@ node scripts/install.mjs --list-targets
 
 - `claude-code-user-rules`
 - `claude-code-project-rules`
+- `claude-code-user-instructions`
+- `claude-code-project-instructions`
 - `claude-code-user-skills`
 - `claude-code-project-skills`
 - `ruler-project-rules`
@@ -146,13 +148,48 @@ node scripts/install.mjs --list-targets
 
 ## 安装 Rule
 
-### 安装到规则文件
+### 默认安装到规则目录
 
-适合 Claude Code 的 `CLAUDE.md` 这类“单文件规则入口”。安装器会用托管注释块包住规则，后续升级时只替换对应块，不覆盖用户其他内容。
+Rule 默认安装为独立 Markdown 文件，不合并到同一个规则文件中。这样后续可以按单个 rule 升级、删除、审计和比较差异。
+
+Claude Code 用户级 rules 目录：
 
 ```bash
 node scripts/install.mjs language-mirroring --preset claude-code-user-rules
 node scripts/install.mjs engineering-terminology-explainer --preset claude-code-user-rules
+```
+
+Claude Code 项目级 rules 目录：
+
+```bash
+node scripts/install.mjs language-mirroring --preset claude-code-project-rules
+node scripts/install.mjs engineering-terminology-explainer --preset claude-code-project-rules
+```
+
+Ruler 项目 rules 目录：
+
+```bash
+node scripts/install.mjs language-mirroring --preset ruler-project-rules
+```
+
+也可以自选规则目录：
+
+```bash
+node scripts/install.mjs language-mirroring --mode rule-directory --target ./.ruler/rules
+```
+
+会生成独立文件：
+
+```text
+.ruler/rules/language-mirroring.md
+```
+
+### 单文件规则入口仅作为 fallback
+
+如果某个 Agent 只支持 `CLAUDE.md` 这类单文件规则入口，才使用 `rule-file` 模式。安装器会用托管注释块包住规则，后续升级时只替换对应块，不覆盖用户其他内容。
+
+```bash
+node scripts/install.mjs language-mirroring --preset claude-code-user-instructions
 ```
 
 等价于自选目标：
@@ -167,26 +204,6 @@ node scripts/install.mjs language-mirroring --mode rule-file --target ~/.claude/
 <!-- skills-repo:start language-mirroring 0.1.0 -->
 ...
 <!-- skills-repo:end language-mirroring -->
-```
-
-### 安装到规则目录
-
-适合使用规则目录的 Agent，例如 `.ruler/rules` 这类结构。
-
-```bash
-node scripts/install.mjs language-mirroring --preset ruler-project-rules
-```
-
-等价于：
-
-```bash
-node scripts/install.mjs language-mirroring --mode rule-directory --target ./.ruler/rules
-```
-
-会生成：
-
-```text
-.ruler/rules/language-mirroring.md
 ```
 
 ## 安装 Skill
@@ -219,7 +236,7 @@ node scripts/install.mjs some-skill --mode skill-directory --target ~/.claude/sk
 
 ```bash
 node scripts/update.mjs language-mirroring --preset claude-code-user-rules --backup
-node scripts/update.mjs engineering-terminology-explainer --mode rule-file --target ~/.claude/CLAUDE.md --dry-run
+node scripts/update.mjs engineering-terminology-explainer --preset claude-code-user-rules --dry-run
 ```
 
 ## 安装参数
@@ -286,7 +303,7 @@ Skill 的入口是 `<skill-name>/SKILL.md`，Rule 的入口是 `rules/<rule-name
   "tags": ["language", "writing", "communication"],
   "compatibility": ["generic-agent"],
   "installModes": ["rule-directory", "rule-file"],
-  "recommendedMode": "rule-file",
+  "recommendedMode": "rule-directory",
   "updatedAt": "2026-08-07"
 }
 ```
